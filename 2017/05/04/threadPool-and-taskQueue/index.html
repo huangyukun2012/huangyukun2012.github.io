@@ -43,7 +43,7 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="C++," />
 
 
 
@@ -59,13 +59,17 @@
 
 
 
+<meta name="description" content="摘要: 线程池与任务队列，是提高程序性能的重要方法。本文通过一个demo展示线程池与任务队列的实现，默认读者已经了解C++中的基本多线程技术：锁、互斥量、信号量. 模型介绍线程间通信是通过任务队列来实现的；线程通信对应的数据和任务都被封装成一个个任务，线程池按照先进先出的原则来处理处理任务队列中的任务。这里我们采用生产者/消费者模型(producer/consumer)。 实例: 生产者以一定的速">
+<meta name="keywords" content="C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="domain-name-resolution">
-<meta property="og:url" content="http://yoursite.com/2016/03/14/domain-name-resolution/index.html">
+<meta property="og:title" content="threadPool_and_taskQueue">
+<meta property="og:url" content="http://yoursite.com/2017/05/04/threadPool-and-taskQueue/index.html">
 <meta property="og:site_name" content="stepfurther">
-<meta property="og:updated_time" content="2016-03-14T01:13:08.000Z">
+<meta property="og:description" content="摘要: 线程池与任务队列，是提高程序性能的重要方法。本文通过一个demo展示线程池与任务队列的实现，默认读者已经了解C++中的基本多线程技术：锁、互斥量、信号量. 模型介绍线程间通信是通过任务队列来实现的；线程通信对应的数据和任务都被封装成一个个任务，线程池按照先进先出的原则来处理处理任务队列中的任务。这里我们采用生产者/消费者模型(producer/consumer)。 实例: 生产者以一定的速">
+<meta property="og:updated_time" content="2017-05-05T11:14:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="domain-name-resolution">
+<meta name="twitter:title" content="threadPool_and_taskQueue">
+<meta name="twitter:description" content="摘要: 线程池与任务队列，是提高程序性能的重要方法。本文通过一个demo展示线程池与任务队列的实现，默认读者已经了解C++中的基本多线程技术：锁、互斥量、信号量. 模型介绍线程间通信是通过任务队列来实现的；线程通信对应的数据和任务都被封装成一个个任务，线程池按照先进先出的原则来处理处理任务队列中的任务。这里我们采用生产者/消费者模型(producer/consumer)。 实例: 生产者以一定的速">
 
 
 
@@ -83,7 +87,7 @@
   };
 </script>
 
-  <title> domain-name-resolution | stepfurther </title>
+  <title> threadPool_and_taskQueue | stepfurther </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="default">
@@ -241,7 +245,7 @@
             
             
               
-                domain-name-resolution
+                threadPool_and_taskQueue
               
             
           </h1>
@@ -253,8 +257,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-03-14T09:13:08+08:00" content="2016-03-14">
-              2016-03-14
+            <time itemprop="dateCreated" datetime="2017-05-04T14:31:50+08:00" content="2017-05-04">
+              2017-05-04
             </time>
           </span>
 
@@ -264,8 +268,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/14/domain-name-resolution/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/14/domain-name-resolution/" itemprop="commentsCount"></span>
+                <a href="/2017/05/04/threadPool-and-taskQueue/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/04/threadPool-and-taskQueue/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -290,7 +294,25 @@
       
 
       
-        
+        <p>摘要: 线程池与任务队列，是提高程序性能的重要方法。本文通过一个demo展示线程池与任务队列的实现，默认读者已经了解C++中的基本多线程技术：锁、互斥量、信号量.</p>
+<h2 id="模型介绍"><a href="#模型介绍" class="headerlink" title="模型介绍"></a>模型介绍</h2><p>线程间通信是通过任务队列来实现的；线程通信对应的数据和任务都被封装成一个个任务，线程池按照先进先出的原则来处理处理任务队列中的任务。这里我们采用生产者/消费者模型(producer/consumer)。</p>
+<p>实例: 生产者以一定的速度产生字符串，插入到任务队列中；消费者不断从任务队列中取出字符串，并将字符串都改成大写之后，然后返回.</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>首先我们来分析任务队列的实现,任务队列需要实现如下功能和特点：</p>
+<ul>
+<li>入队列(enqueue): 将新任务加入到队列头部.</li>
+<li>出队列(dequeue): 从队列尾部取出一个任务; 由于任务队列是生产者和消费者（线程池）共享的；所以对任务队列的访问在不同的线程之间，需要串行执行; 这里，我们需要通过互斥锁来实现对队列的串行访问.</li>
+<li>队列判空(empty)</li>
+</ul>
+<p>其中producer 一端有8个线程，consumer 有8个线程，持续处理任务队列中的任务. 整个工作流如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">producer:</div><div class="line">while(true)</div><div class="line">&#123;</div><div class="line">	Task *t=generate_task();</div><div class="line">	enqueue(t);</div><div class="line">	sleep(random_period);</div><div class="line">&#125;</div><div class="line"></div><div class="line">consumer:</div><div class="line">while(true)</div><div class="line">&#123;</div><div class="line">	if(!queue.empty())</div><div class="line">	&#123;</div><div class="line">		Task *t=nullptr;	</div><div class="line">		t= dequeue();</div><div class="line">		if (t != nullptr)</div><div class="line">			t-&gt;run()</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>显然，上述简单的模型存在以下问题:</p>
+<ol>
+<li>即使任务队列为空，CPU的利用率依然会在100%，因为消费者会出现忙等待。为了解决这个问题，我们需要引入信号量来实现线程同步——任务队列为空的时候，阻塞消费者线程;当任务队列非空时，唤醒消费者线程.</li>
+<li>当消费者线程处理缓慢的时候, 生产者进程会不断给任务队列增加新的任务，最终导致资源耗尽而死机;所以需要引入另外一个信号量，表示任务已满：当任务已满的时候，阻塞生产者线程；当不满时，唤醒生产者线程.</li>
+</ol>
+<p>同时，我们可以将互斥量的使用封装在函数内部(dequeue, enqueue), 这样，workflow 如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">consumer:</div><div class="line">    Task *task=nullptr;</div><div class="line">    while (task_queue_.dequeue(task) &gt;= 0)</div><div class="line">    &#123;</div><div class="line">		task-&gt;run();</div><div class="line">        task-&gt;destroy();</div><div class="line">    &#125;</div><div class="line">producer:</div><div class="line">	while(true)</div><div class="line">	&#123;</div><div class="line">		Task *task=nullptr;</div><div class="line">		generate_task(task);</div><div class="line">		task_queue_.enqueue(task);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">=========</div><div class="line">          int enqueue(T *t)</div><div class="line">          &#123;</div><div class="line">              mutex_.acquire();</div><div class="line">				//carefull:one thread may be blocked not only for this condition:not_full_cond_, so we use `while` instead of `if`.</div><div class="line">              while (count_ &gt;= capacity_)</div><div class="line">              &#123;</div><div class="line">                  not_full_cond_.wait();</div><div class="line">              &#125;</div><div class="line">              items_.push_back(t);</div><div class="line">              ++count_;</div><div class="line">              not_empty_cond_.signal();</div><div class="line">              mutex_.release();</div><div class="line">              return 0;</div><div class="line">          &#125;</div><div class="line"></div><div class="line">          int dequeue(T *&amp;t)</div><div class="line">          &#123;</div><div class="line">              mutex_.acquire();</div><div class="line">              while (items_.empty())</div><div class="line">              &#123;</div><div class="line">                  empty_cond_.signal();</div><div class="line">                  not_empty_cond_.wait();</div><div class="line">              &#125;</div><div class="line"></div><div class="line">              &#123; t = items_.back(); items_.pop_back(); &#125;</div><div class="line">              --count_;</div><div class="line">              not_full_cond_.signal();</div><div class="line">              mutex_.release();</div><div class="line">              return 0;</div><div class="line">          &#125;</div></pre></td></tr></table></figure>
+<p>详细的code可以参考这里()</p>
+
       
     </div>
 
@@ -302,22 +324,24 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag">#C++</a>
+          
+        </div>
+      
 
       
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/10/ios-developing/" rel="next" title="swift 语法介绍">
-                <i class="fa fa-chevron-left"></i> swift 语法介绍
+              <a href="/2017/05/04/octave/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/05/04/octave/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -343,8 +367,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/03/14/domain-name-resolution/"
-           data-title="domain-name-resolution" data-url="http://yoursite.com/2016/03/14/domain-name-resolution/">
+      <div class="ds-thread" data-thread-key="2017/05/04/threadPool-and-taskQueue/"
+           data-title="threadPool_and_taskQueue" data-url="http://yoursite.com/2017/05/04/threadPool-and-taskQueue/">
       </div>
     
   </div>
@@ -457,7 +481,7 @@
               
             
             
-              <p class="post-toc-empty">This post does not have a Table of Contents</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#模型介绍"><span class="nav-number">1.</span> <span class="nav-text">模型介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

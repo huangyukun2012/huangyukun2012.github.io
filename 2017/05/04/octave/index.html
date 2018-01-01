@@ -59,13 +59,16 @@
 
 
 
+<meta name="description" content="摘要: octave是一门很好的机器学习入门语言，本文主要介绍octave的一些基本语法：矩阵的创建、基本运算等。 向量linspace (base, limit, n)    Return a row vector with n linearly spaced elements between base and limit.You can open multiple plot windows u">
 <meta property="og:type" content="article">
-<meta property="og:title" content="domain-name-resolution">
-<meta property="og:url" content="http://yoursite.com/2016/03/14/domain-name-resolution/index.html">
+<meta property="og:title" content="stepfurther">
+<meta property="og:url" content="http://yoursite.com/2017/05/04/octave/index.html">
 <meta property="og:site_name" content="stepfurther">
-<meta property="og:updated_time" content="2016-03-14T01:13:08.000Z">
+<meta property="og:description" content="摘要: octave是一门很好的机器学习入门语言，本文主要介绍octave的一些基本语法：矩阵的创建、基本运算等。 向量linspace (base, limit, n)    Return a row vector with n linearly spaced elements between base and limit.You can open multiple plot windows u">
+<meta property="og:updated_time" content="2017-05-04T06:16:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="domain-name-resolution">
+<meta name="twitter:title" content="stepfurther">
+<meta name="twitter:description" content="摘要: octave是一门很好的机器学习入门语言，本文主要介绍octave的一些基本语法：矩阵的创建、基本运算等。 向量linspace (base, limit, n)    Return a row vector with n linearly spaced elements between base and limit.You can open multiple plot windows u">
 
 
 
@@ -83,7 +86,7 @@
   };
 </script>
 
-  <title> domain-name-resolution | stepfurther </title>
+  <title>  | stepfurther </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="default">
@@ -241,7 +244,7 @@
             
             
               
-                domain-name-resolution
+                
               
             
           </h1>
@@ -253,8 +256,8 @@
               <i class="fa fa-calendar-o"></i>
             </span>
             <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-03-14T09:13:08+08:00" content="2016-03-14">
-              2016-03-14
+            <time itemprop="dateCreated" datetime="2017-05-04T14:16:07+08:00" content="2017-05-04">
+              2017-05-04
             </time>
           </span>
 
@@ -264,8 +267,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/2016/03/14/domain-name-resolution/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/14/domain-name-resolution/" itemprop="commentsCount"></span>
+                <a href="/2017/05/04/octave/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/04/octave/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -290,7 +293,17 @@
       
 
       
-        
+        <p>摘要: octave是一门很好的机器学习入门语言，本文主要介绍octave的一些基本语法：矩阵的创建、基本运算等。</p>
+<h2 id="向量"><a href="#向量" class="headerlink" title="向量"></a>向量</h2><p><code>linspace (base, limit, n)</code><br>    Return a row vector with n linearly spaced elements between base and limit.<br>You can open multiple plot windows using the figure function. For example,</p>
+<p><code>logspace (a, b, n)</code><br>Return a row vector with n elements logarithmically spaced from 10^a to 10^b.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">figure (1);</div><div class="line">fplot (@sin, [-10, 10]);</div><div class="line">figure (2);</div><div class="line">fplot (@cos, [-10, 10]);</div></pre></td></tr></table></figure>
+<p><code>surf</code><br>: surf (x, y, z)<br>: surf (z)<br>: surf (…, c)<br>: surf (…, prop, val, …)<br>: surf (hax, …)<br>: h = surf (…)<br>Plot a 3-D surface mesh.</p>
+<ul>
+<li>plot  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">: plot (y)</div><div class="line">: plot (x, y)</div><div class="line">: plot (x, y, fmt)</div><div class="line">: plot (…, property, value, …)</div><div class="line">: plot (x1, y1, …, xn, yn)</div><div class="line">: plot (hax, …)</div><div class="line">: h = plot (…)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>eg: <code>plot(theta(1), theta(2), &#39;rx&#39;, &#39;MarkerSize&#39;, 10, &#39;LineWidth&#39;, 2);</code></p>
+
       
     </div>
 
@@ -307,16 +320,16 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/10/ios-developing/" rel="next" title="swift 语法介绍">
-                <i class="fa fa-chevron-left"></i> swift 语法介绍
+              <a href="/2016/03/14/domain-name-resolution/" rel="next" title="domain-name-resolution">
+                <i class="fa fa-chevron-left"></i> domain-name-resolution
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/05/04/octave/" rel="prev" title="">
-                 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/05/04/threadPool-and-taskQueue/" rel="prev" title="threadPool_and_taskQueue">
+                threadPool_and_taskQueue <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -343,8 +356,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/03/14/domain-name-resolution/"
-           data-title="domain-name-resolution" data-url="http://yoursite.com/2016/03/14/domain-name-resolution/">
+      <div class="ds-thread" data-thread-key="2017/05/04/octave/"
+           data-title="" data-url="http://yoursite.com/2017/05/04/octave/">
       </div>
     
   </div>
@@ -457,7 +470,7 @@
               
             
             
-              <p class="post-toc-empty">This post does not have a Table of Contents</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#向量"><span class="nav-number">1.</span> <span class="nav-text">向量</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
